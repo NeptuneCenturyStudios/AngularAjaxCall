@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!--this example web page uses AngularJS to fetch items from a webservice and display them in a table.
+    our webservce is CORS enabled so it can be called from a different domain.-->
+    <title>Angular Ajax Example</title>
+
+    <!--include angular-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+    <!--some styles to make it look decent-->
+    <style>
+        tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        td, th {
+            padding: 5px 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+            td.right {
+                text-align: right;
+            }
+    </style>
+
+</head>
+<body data-ng-app="app">
+
+    <!--use the app name we set when creating the module-->
+    <div ng-controller="ItemController">
+
+        <button id="stff" ng-click="getItems()">Get Items</button>
+
+        <p>Look at the list of items!</p>
+
+        <!--this table shows the items we get from our service-->
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!--repeat this table row for each item in items-->
+                <tr ng-repeat="item in items">
+                    <td>{{item.Name}}</td>
+                    <td>{{item.Description}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td class="right">{{item.Price | currency}}</td>
+                    <td class="right">{{item.Quantity * item.Price | currency}}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <script>
+
+
+        (function () {
+
+            //create our module
+            angular.module('app', [])
+
+                //add controller
+                .controller('ItemController', function ($scope, $http) {
+
+                    //declare an array of items. this will get populated with our ajax call
+                    $scope.items = [];
+
+                    //declare an action for our button
+                    $scope.getItems = function () {
+
+                        //perform ajax call. our service is CORS enabled, so we can call our service cross-domain
+                        $http({
+                            url: "http://services.neptunecentury.net/examples/items",
+                            method: "GET"
+                        }).success(function (data, status, headers, config) {
+                            
+                            //copy the data we get to our items array. we need to use angular.copy so that
+                            //angular can track the object and bind it automatically.
+                            angular.copy(data, $scope.items);
+
+
+                        }).error(function (data, status, headers, config) {
+                            //something went wrong
+                            alert('Error getting data');
+                        });
+                    }
+
+                });
+        })();
+
+
+    </script>
+
+</body>
+</html>
