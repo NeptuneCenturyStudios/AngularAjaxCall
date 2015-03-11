@@ -1,8 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!--this example web page uses AngularJS to fetch items from a webservice and display them in a table.
-    our webservce is CORS enabled so it can be called from a different domain.-->
+    <!--this example web page uses AngularJS to fetch items from a webservice and display them in a table.-->
     <title>Angular Ajax Example</title>
 
     <!--include angular-->
@@ -80,9 +79,9 @@
                     //declare an action for our button
                     $scope.getItems = function () {
 
-                        //perform ajax call. our service is CORS enabled, so we can call our service cross-domain
+                        //perform ajax call.
                         $http({
-                            url: "http://services.neptunecentury.net/examples/items",
+                            url: "/examples/items",
                             method: "GET"
                         }).success(function (data, status, headers, config) {
                             
